@@ -20,7 +20,23 @@ lightgbm==3.2.1
 <br />
 
 ## Usage
+In the root directory:<br /> 
+'app' folder wraps the classifier web application.<br /> 
+Inside 'app' folder:
+* 'models' folder contains the final ML model and other related serialized objects for implementing the web service.
+* 'tests.py' is for unit tests of the web application.<br /> 
 
-To 
+'notebook' folder contains the jupyter notebook for data exploration and modelling experimentation.<br /> 
+'Dockerfile' is for the containerized web application.<br /> 
 
-![a](./others/screenshots/test1.jpg)
+
+To run the containerized web application:<br /> 
+1. Build image and run container using 'Dockerfile'.
+2. Open the prompted url (i.e. 'http//127.0.0.1:8000').
+3. Divert to the homepage of API by adding suffix '/docs' (i.e. '127.0.0.1:8000/docs').
+4. 3 functions provided by the web application are displayed:<br />![a](./others/screenshots/im1.png)<br />
+5. Function 'Get Titles of Selected Genre' will return a list of song titles that belongs to the provided genre. To use the funtion, a genre name needs to be given as input.<br />![a](./others/screenshots/im2.png)<br /> Example of output:<br />![a](./others/screenshots/im5.png)<br /> 
+6. Function 'List of Classified Genres' will show all classified/predicted genres for songs that are already input to and analyzed by the classifier. No user inputs are needed here.<br /> Example of output: <br />![a](./others/screenshots/im4.png)<br />
+7. Function 'Predict' will predict the genres of songs provided by the user. The input format should be an external .csv file that will be uploaded to the website (Only single file upload is valid). As illustrated below:<br />![a](./others/screenshots/im3.png)<br /> Example of output: <br />![a](./others/screenshots/im6.png)<br />
+8. Once 'Predict' function is performed successfully, titles of provided songs and corresponding classified genres will be stored to the database automatically.
+
