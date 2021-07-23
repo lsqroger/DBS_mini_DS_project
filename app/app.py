@@ -1,12 +1,12 @@
 import uvicorn
 from fastapi import FastAPI, File, UploadFile
-import joblib
 from typing import List
-#import json
 import pandas as pd
 import numpy as np
 import sqlite3
 from io import StringIO
+import sklearn
+import pickle
 
 
 
@@ -68,19 +68,18 @@ def get_classified_genres(conn):
 
 
 # Load trained scaler
-#load_data_scaler = open("models/final_scaler.p", "rb")
-load_data_scaler = open("final_scaler.p", "rb")
-data_scaler = joblib.load(load_data_scaler)
+with open("models/final_scaler.p", "rb") as f:
+    data_scaler = pickle.load(f)
 
 # Load trained ML Classifier model
-#load_classifier = open("models/final_model.p", "rb")
-load_classifier = open("final_model.p", "rb")
-ml_classifier = joblib.load(load_classifier)
+with open("models/final_model.p", "rb") as f:
+    ml_classifier = pickle.load(f)
+
 
 # Load selected features
-#load_features = open("models/selected_features.p", "rb")
-load_features = open("selected_features.p", "rb")
-selected_features = joblib.load(load_features)
+with open("models/selected_features.p", "rb") as f:
+    selected_features = pickle.load(f)
+
 
 # To get a list of titles to the provided genre
 @app.get("/titles/{name}")
@@ -110,6 +109,13 @@ async def predict(files: List[UploadFile] = File(...)):
     selected_features_temp = selected_features.copy()
     selected_features_temp.remove('pop_tags')
     selected_features_temp = selected_features_temp + ['tags']
+    # Check if current input dataframe has all required selected features. If not, stop the process
+    try:
+        check_columns = df_input[selected_features_temp]
+        check_columns = None
+    except KeyError:
+        return {"Error": "Uploaded file is missing some important feature columns"}
+
     df_input.dropna(subset=selected_features_temp, axis=0, how='any', inplace=True)
 
     # Count presence of top 5 frequent tags related to 'pop' genre
@@ -156,4 +162,4 @@ async def predict(files: List[UploadFile] = File(...)):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app,host="127.0.0.1",port=8000)
+    uvicorn.run(app,host="0.0.0.0",port=8000)
