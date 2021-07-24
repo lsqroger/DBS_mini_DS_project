@@ -98,7 +98,7 @@ async def list_of_classified_genres():
     conn = create_sqlite_con('music.db')
     results_list = get_classified_genres(conn)
     conn.close()
-
+    
     return {"Number of classified genres":[len(results_list)],"List of classified genres": results_list}
 
 
@@ -148,10 +148,14 @@ async def predict(files: List[UploadFile] = File(...)):
     # Persists the results and titles into sqlite DB
     conn = create_sqlite_con('music.db')
     preds_list_tuples = list(test_preds.to_records())
+    capture_duplicates = []
     for ittr in range(len(preds_list_tuples)):
         t_new_insert = preds_list_tuples[ittr]
         t_new_insert = tuple(list(t_new_insert)[1:])
-        insert_classified_results(conn, t_new_insert)
+        try:
+            insert_classified_results(conn, t_new_insert)
+        except:
+            return {'Error': 'Attempt to insert duplicate records'}
 
     delete_duplicates(conn)
     conn.close()

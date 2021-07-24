@@ -15,7 +15,8 @@ scikit-learn==0.23.2<br />
 uvicorn==0.14.0<br />
 fastapi==0.67.0<br />
 xgboost==1.4.2<br />
-lightgbm==3.2.1
+lightgbm==3.2.1<br />
+python-multipart==0.0.5
 
 <br />
 
@@ -23,15 +24,16 @@ lightgbm==3.2.1
 In the root directory:<br /> 
 'app' folder wraps the classifier web application.<br /> 
 Inside 'app' folder:
-* 'models' folder contains the final ML model and other related serialized objects for implementing the web service.
-* 'tests.py' is for unit tests of the web application.<br /> 
+* 'models' folder:  contains the final ML model and other related serialized objects for implementing the web service.
+* 'tests.py': for unit tests of the web application.
+* 'music.db': sqlite database for the web application<br /> 
 
 'notebook' folder contains the jupyter notebook for data exploration and modelling experimentation.<br /> 
 'Dockerfile' is for the containerized web application.<br /> 
 
 
 To run the containerized web application:<br /> 
-1. Build image and run container using 'Dockerfile'.
+1. Build docker image and run container (port==8000) using 'Dockerfile'.
 2. Open the prompted url (i.e. 'http//127.0.0.1:8000').
 3. Divert to the homepage of API by adding suffix '/docs' (i.e. '127.0.0.1:8000/docs').
 4. 3 functions provided by the web application are displayed:<br />![a](./others/screenshots/im1.png)<br />
